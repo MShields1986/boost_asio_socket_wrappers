@@ -17,7 +17,7 @@ FetchContent_MakeAvailable(simple_boost_asio_sockets)
 Then link against your intended compilation target.
 
 ```cmake
-target_link_libraries(${EXECUTABLE_NAME} BoostSocketWrappers)
+target_link_libraries(${TARGET_NAME} BoostSocketWrappers)
 
 ```
 
