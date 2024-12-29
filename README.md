@@ -1,7 +1,7 @@
 # boost_asio_socket_wrappers
 Simple wrapper classes around common Boost ASIO socket interfaces.
 
-# Including in an external project
+# Including in an External Project
 Use the inclusions below in your CMakeLists.txt to have CMake fetch and build the library for you.
 
 ```cmake
