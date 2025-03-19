@@ -4,11 +4,8 @@
 
 namespace BoostSocketWrappers {
 
-TcpClientBoost::TcpClientBoost(const std::string& ip_address, const int& port)
-     : ip_address_(ip_address), 
-       port_(port),
-       io_context_(),
-       remote_endpoint_(boost::asio::ip::address::from_string(ip_address), port),
+TcpClientBoost::TcpClientBoost()
+     : io_context_(),
        socket_(io_context_)
 {
 }
@@ -19,8 +16,21 @@ TcpClientBoost::~TcpClientBoost() {
 }
 
 
+void TcpClientBoost::setup(const std::string& ip_address, const int& port) {
+    using namespace boost::asio::ip;
+
+    ip_address_ = ip_address; 
+    port_ = port;
+    remote_endpoint_ = tcp::endpoint(address::from_string(ip_address_), port_);
+}
+
+
 void TcpClientBoost::connect() {
     socket_.connect(remote_endpoint_);
+    {
+        using namespace boost::asio::ip;
+        socket_.set_option(tcp::no_delay(true));
+    }
 }
 
 

@@ -13,9 +13,10 @@ namespace BoostSocketWrappers {
 
 class TcpClientBoost {
 public:
-    TcpClientBoost(const std::string& ip_address, const int& port);
+    TcpClientBoost();
     ~TcpClientBoost();
 
+    void                               setup(const std::string& ip_address, const int& port);
     void                               connect();
     std::vector<unsigned char>         receive(const size_t& size);
     void                               send(const std::string& message);
