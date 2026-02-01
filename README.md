@@ -36,6 +36,7 @@ std::vector<unsigned char> response = tcp_server.receive(buffer_size);
 ```
 
 ## TCP Client
+### Synchronous
 ```cpp
 #include <BoostSocketWrappers/tcp_client_boost.h>
 
@@ -43,10 +44,31 @@ BoostSocketWrappers::TcpClientBoost tcp_client;
 
 size_t buffer_size(256);
 
-tcp_client("192.1.1.10", 1111);
+tcp_client.setup("192.1.1.10", 1111);
 tcp_client.connect();
 tcp_client.send("command string");
 std::vector<unsigned char> response = tcp_client.receive(buffer_size);
+```
+
+### Asynchronous
+```cpp
+#include <BoostSocketWrappers/tcp_client_boost.h>
+
+BoostSocketWrappers::TcpClientBoost tcp_client;
+
+tcp_client.setup("192.1.1.10", 1111);
+tcp_client.connect();
+
+tcp_client.startIoThread();
+
+tcp_client.send("command string");
+tcp_client.asyncReceive(256, [](std::vector<unsigned char> data, boost::system::error_code ec) {
+    if (!ec) {
+        // Process received data
+    }
+});
+
+tcp_client.stopIoThread();
 ```
 
 ## UDP Client
