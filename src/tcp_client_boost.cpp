@@ -50,8 +50,7 @@ std::vector<unsigned char> TcpClientBoost::receive(const size_t& size) {
 
 
 void TcpClientBoost::send(const std::string& message) {
-  const std::string msg = message;
-  boost::asio::write(socket_, boost::asio::buffer(msg));
+  boost::asio::write(socket_, boost::asio::buffer(message));
 }
 
 
@@ -124,6 +123,18 @@ void TcpClientBoost::asyncReceive(size_t size, ReceiveCallback callback) {
                 data = std::move(async_recv_buffer_);
             }
             callback(std::move(data), ec);
+        });
+}
+
+
+void TcpClientBoost::asyncReceiveZeroCopy(size_t size, BorrowedReceiveCallback callback) {
+    async_recv_buffer_.resize(size);
+    boost::asio::async_read(
+        socket_,
+        boost::asio::buffer(async_recv_buffer_),
+        [this, callback](boost::system::error_code ec, std::size_t /*bytes_transferred*/) {
+            // Lend the buffer by const reference — it stays allocated between calls
+            callback(async_recv_buffer_, ec);
         });
 }
 

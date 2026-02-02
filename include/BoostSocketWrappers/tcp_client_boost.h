@@ -13,6 +13,7 @@ namespace BoostSocketWrappers {
 class TcpClientBoost {
 public:
     using ReceiveCallback = std::function<void(std::vector<unsigned char>, boost::system::error_code)>;
+    using BorrowedReceiveCallback = std::function<void(const std::vector<unsigned char>&, boost::system::error_code)>;
 
     TcpClientBoost();
     ~TcpClientBoost();
@@ -29,6 +30,7 @@ public:
     void                               cancelPendingOperations();
     void                               drainSocket();
     void                               asyncReceive(size_t size, ReceiveCallback callback);
+    void                               asyncReceiveZeroCopy(size_t size, BorrowedReceiveCallback callback);
 
 private:
     std::string                        ip_address_;
